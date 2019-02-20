@@ -2,11 +2,23 @@ package com.marksduarte.cursomc.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.hibernate.validator.constraints.Length;
+
+@Entity
 public class Categoria implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Length(min = 2, max = 255, message = "O campo nome deve ter entre {min} e {max} caracteres.")
 	private String nome;
 	
 	public Categoria() {

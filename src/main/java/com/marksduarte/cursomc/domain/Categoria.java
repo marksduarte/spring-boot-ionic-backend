@@ -12,6 +12,8 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Categoria implements Serializable {
 	
@@ -24,6 +26,7 @@ public class Categoria implements Serializable {
 	@Length(min = 2, max = 255, message = "O campo nome deve ter entre {min} e {max} caracteres.")
 	private String nome;
 	
+	@JsonManagedReference
 	@ManyToMany(mappedBy = "categorias")
 	private List<Produto> produtos = new ArrayList<>();
 	

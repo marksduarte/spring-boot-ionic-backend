@@ -26,7 +26,7 @@ public class Produto implements Serializable {
 	private String nome;
 	private Double preco;
 	
-	@JsonBackReference
+	@JsonBackReference //Evita o problema da referência ciclica. Quando a categoria é consultada, os produtos já são instanciados.
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA", 
 	joinColumns = @JoinColumn(name = "produto_id"), 

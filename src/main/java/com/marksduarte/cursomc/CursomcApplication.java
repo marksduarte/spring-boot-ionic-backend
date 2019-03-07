@@ -1,12 +1,16 @@
 package com.marksduarte.cursomc;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.marksduarte.cursomc.domain.Categoria;
+import com.marksduarte.cursomc.domain.Produto;
 import com.marksduarte.cursomc.repositories.CategoriaRepository;
+import com.marksduarte.cursomc.repositories.ProdutoRepository;
 
 
 @SpringBootApplication
@@ -14,6 +18,9 @@ public class CursomcApplication implements CommandLineRunner  {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepo;
+	
+	@Autowired
+	private ProdutoRepository produtoRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -24,10 +31,21 @@ public class CursomcApplication implements CommandLineRunner  {
 		
 		// O atributo id é passado como nulo, pois o campo no banco é autoincrement
 		Categoria cat1 = new Categoria(null, "Informática");
-		Categoria cat2 = new Categoria(null, "Escritório");
+		Categoria cat2 = new Categoria(null, "Escritório");		
+
+		Produto p1 = new Produto(null, "Computador", 2000.0);
+		Produto p2 = new Produto(null, "Mouse", 80.0);
+		Produto p3 = new Produto(null, "Impressora", 800.0);
 		
-		categoriaRepo.save(cat1);
-		categoriaRepo.save(cat2);
+		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
+		cat2.getProdutos().addAll(Arrays.asList(p2));
+		
+		p1.getCategorias().addAll(Arrays.asList(cat1));
+		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
+		p3.getCategorias().addAll(Arrays.asList(cat1));
+		
+		categoriaRepo.saveAll(Arrays.asList(cat1, cat2));
+		produtoRepo.saveAll(Arrays.asList(p1, p2, p3));
 		
 	}
 

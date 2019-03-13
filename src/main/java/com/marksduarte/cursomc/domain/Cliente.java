@@ -37,6 +37,9 @@ public class Cliente implements Serializable {
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos = new ArrayList<Pedido>();
+	
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
 		super();
 		this.id = id;
@@ -104,6 +107,14 @@ public class Cliente implements Serializable {
 
 	public void setEnderecos(List<Endereco> enderecos) {
 		this.enderecos = enderecos;
+	}
+		
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class Cliente implements Serializable {
 	private String email;
 	private String cpfOuCnpj;
 	
-	private TipoCliente tipo;
+	private Integer tipo;
 	
 	@ElementCollection
 	@CollectionTable(name = "TELEFONES")
@@ -41,7 +41,7 @@ public class Cliente implements Serializable {
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipo = tipo;
+		this.tipo = tipo.getCod();
 	}
 	
 	public Cliente() {
@@ -81,11 +81,27 @@ public class Cliente implements Serializable {
 	}
 
 	public TipoCliente getTipo() {
-		return tipo;
+		return TipoCliente.toEnum(tipo);
 	}
 
 	public void setTipo(TipoCliente tipo) {
-		this.tipo = tipo;
+		this.tipo = tipo.getCod();
+	}
+		
+	public Set<String> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(Set<String> telefones) {
+		this.telefones = telefones;
+	}
+
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
 	}
 
 	@Override

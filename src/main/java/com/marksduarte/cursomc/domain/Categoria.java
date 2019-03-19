@@ -25,8 +25,7 @@ public class Categoria implements Serializable {
 	
 	@Length(min = 2, max = 255, message = "O campo nome deve ter entre {min} e {max} caracteres.")
 	private String nome;
-	
-	@JsonManagedReference //Evita o problema da referência ciclica.
+		
 	@ManyToMany(mappedBy = "categorias")
 	private List<Produto> produtos = new ArrayList<>();
 	

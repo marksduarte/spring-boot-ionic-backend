@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Endereco  implements Serializable {
@@ -28,7 +29,7 @@ public class Endereco  implements Serializable {
 	@JoinColumn(name = "cidade_id")
 	private Cidade cidade;
 	
-	@JsonBackReference //Endereco não vai serializar o cliente
+	@JsonIgnore 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;

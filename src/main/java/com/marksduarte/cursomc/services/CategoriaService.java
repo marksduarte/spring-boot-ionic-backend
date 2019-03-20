@@ -3,10 +3,12 @@ package com.marksduarte.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.marksduarte.cursomc.domain.Categoria;
 import com.marksduarte.cursomc.repositories.CategoriaRepository;
+import com.marksduarte.cursomc.services.exceptions.DataIntegrityException;
 import com.marksduarte.cursomc.services.exceptions.ObjectNotFoundException;
 
 
@@ -28,8 +30,17 @@ public class CategoriaService {
 		return repo.save(obj);
 	}
 	
-	public void update(Categoria obj) {
+	public Categoria update(Categoria obj) {
 		find(obj.getId()); //-> Chamar o método find para verificar se o objeto existe no banco.
-		repo.save(obj);
+		return repo.save(obj);
+	}
+	
+	public void delete(final Integer id) {
+		find(id);
+		try {
+			repo.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos.");
+		}
 	}
 }

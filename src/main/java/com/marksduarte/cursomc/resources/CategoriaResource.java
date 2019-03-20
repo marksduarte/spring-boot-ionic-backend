@@ -37,4 +37,11 @@ public class CategoriaResource {
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
+	
+	@RequestMapping(value = "/{id}" , method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+		obj.setId(id); //-> O método find em CategoriaService retornou uma exceção quando não tinha essa operação.
+		service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
 }

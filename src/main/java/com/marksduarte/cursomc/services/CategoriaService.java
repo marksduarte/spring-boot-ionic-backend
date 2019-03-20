@@ -27,4 +27,9 @@ public class CategoriaService {
 		obj.setId(null);
 		return repo.save(obj);
 	}
+	
+	public void update(Categoria obj) {
+		find(obj.getId()); //-> Chamar o método find para verificar se o objeto existe no banco.
+		repo.save(obj);
+	}
 }

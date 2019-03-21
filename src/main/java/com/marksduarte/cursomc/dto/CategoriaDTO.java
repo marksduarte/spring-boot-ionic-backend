@@ -4,6 +4,13 @@ import java.io.Serializable;
 
 import com.marksduarte.cursomc.domain.Categoria;
 
+/**
+ * Uma classe DTO serve para quando queremos enviar somente alguns
+ * atributos na requisição.
+ * 
+ * @author marks
+ *
+ */
 public class CategoriaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

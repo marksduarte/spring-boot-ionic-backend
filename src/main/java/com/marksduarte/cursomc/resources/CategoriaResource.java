@@ -1,8 +1,8 @@
 package com.marksduarte.cursomc.resources;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.marksduarte.cursomc.domain.Categoria;
+import com.marksduarte.cursomc.dto.CategoriaDTO;
 import com.marksduarte.cursomc.services.CategoriaService;
 
 @RestController
@@ -49,5 +50,15 @@ public class CategoriaResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		List<Categoria> list = service.findAll();
+		//Atribuir os elementos da lista de Categoria para os elementos da lista DTO
+		List<CategoriaDTO> listDto = list.stream() 	//Percorre os elementos da lista, define o nome da variavel de cada objeto como obj
+				.map(obj -> new CategoriaDTO(obj)) 	//e com uma arrow function (classe anonima), passa o obj no construtor da DTO.
+				.collect(Collectors.toList());		//Depois retorna a lista com o método de Collectors.
+		return ResponseEntity.ok().body(listDto);
 	}
 }

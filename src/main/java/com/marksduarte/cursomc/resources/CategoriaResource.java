@@ -5,12 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.marksduarte.cursomc.domain.Categoria;
@@ -59,6 +56,26 @@ public class CategoriaResource {
 		List<CategoriaDTO> listDto = list.stream() 	//Percorre os elementos da lista, define o nome da variavel de cada objeto como obj
 				.map(obj -> new CategoriaDTO(obj)) 	//e com uma arrow function (classe anonima), passa o obj no construtor da DTO.
 				.collect(Collectors.toList());		//Depois retorna a lista com o método de Collectors.
+		return ResponseEntity.ok().body(listDto);
+	}
+
+	/**
+	 * Faz a paginação, buscando os dados aos poucos.
+	 *
+	 * @param page defaultValue is a page at 0
+	 * @param linesPerPage defaultValue 24 [24 pois é divisivel por 1,2,3 e 4]
+	 * @param orderBy defaultValue nome
+	 * @param direction defaultValue ASC
+	 * @return
+	 */
+	@RequestMapping(value = "/page", method = RequestMethod.GET)
+	public ResponseEntity<Page<CategoriaDTO>> findPage(
+			@RequestParam(name = "page", defaultValue = "0") Integer page,
+			@RequestParam(name = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+			@RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
+			@RequestParam(name = "direction", defaultValue = "ASC") String direction){
+		Page<Categoria> list = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<CategoriaDTO> listDto = list.map(obj -> new CategoriaDTO(obj));
 		return ResponseEntity.ok().body(listDto);
 	}
 }

@@ -3,6 +3,9 @@ package com.marksduarte.cursomc.dto;
 import java.io.Serializable;
 
 import com.marksduarte.cursomc.domain.Categoria;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * Uma classe DTO serve para quando queremos enviar somente alguns
@@ -16,6 +19,9 @@ public class CategoriaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+
+	@NotBlank(message = "Preenchimento obrigatório")
+	@Length(min = 5, max = 80, message = "A quantidade de caracteres deve estar entre {min} e {max}.")
 	private String nome;
 	
 	public CategoriaDTO() {

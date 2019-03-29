@@ -36,10 +36,15 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria obj) {
-		find(obj.getId()); //-> Chamar o método find para verificar se o objeto existe no banco.
-		return repo.save(obj);
+		Categoria newObj = find(obj.getId());//-> Chamar o método find para verificar se o objeto existe no banco.
+		updateData(newObj, obj);
+		return repo.save(newObj);
 	}
-	
+
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+	}
+
 	public void delete(final Integer id) {
 		find(id);
 		try {

@@ -1,16 +1,13 @@
 package com.marksduarte.cursomc.resources;
 
-import ch.qos.logback.core.net.server.Client;
-import com.marksduarte.cursomc.domain.Categoria;
-import com.marksduarte.cursomc.dto.CategoriaDTO;
+import com.marksduarte.cursomc.domain.Cliente;
 import com.marksduarte.cursomc.dto.ClienteDTO;
+import com.marksduarte.cursomc.dto.ClienteNewDTO;
+import com.marksduarte.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.marksduarte.cursomc.domain.Cliente;
-import com.marksduarte.cursomc.services.ClienteService;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -33,7 +30,7 @@ public class ClienteResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDto) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
 		Cliente obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

@@ -29,6 +29,8 @@ public class PedidoService {
 	private PagamentoRepository pagamentoRepository;
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	@Autowired
+	private ClienteService clienteService;
 	
 	public Pedido find(final Integer id) {
 		Optional<Pedido> pedido = repo.findById(id);
@@ -41,6 +43,10 @@ public class PedidoService {
 		obj.setInstante(new Date());
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj); //o pagamento deve conhecer o pedido dele
+		/**
+		 * Consulta o cliente no DB e o associa ao objeto Pedido
+		 */
+		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		/**
 		 * Como não temos um webservice que gera o boleto e retorna a data de vencimento
 		 * vamo gerar uma para teste.
@@ -58,8 +64,13 @@ public class PedidoService {
 			item.setDesconto(0.0);
 			item.setPreco(produtoService.find(item.getProduto().getId()).getPreco());
 			item.setPedido(obj);
+			/**
+			 * Consulta o produto no DB e o associa ao ItemPedido.
+			 */
+			item.setProduto(produtoService.find(item.getProduto().getId()));
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj);
 		return obj;
 	}
 

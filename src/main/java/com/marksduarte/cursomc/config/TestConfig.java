@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.marksduarte.cursomc.services.DBService;
+import com.marksduarte.cursomc.services.MockEmailService;
 
 /**
  * Essa classe define os beans que serão utilizados quando o profile test
@@ -30,5 +31,15 @@ public class TestConfig {
 	public boolean instantiateDatabase() throws ParseException {
 		dbService.instantiateTestDatabase();
 		return true;
+	}
+	
+	/**
+	 * Quando ser faz um método @Bean, esse objeto vai 
+	 * ficar disponivel para todo o sistema.
+	 * @return
+	 */
+	@Bean
+	public MockEmailService EmailService() {
+		return new MockEmailService();
 	}
 }

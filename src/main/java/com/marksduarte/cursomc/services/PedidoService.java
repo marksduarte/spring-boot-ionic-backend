@@ -21,8 +21,7 @@ public class PedidoService {
 	@Autowired
 	private BoletoService boletoService;
 	@Autowired
-	private ProdutoService produtoService;
-	
+	private ProdutoService produtoService;	
 	@Autowired
 	private PedidoRepository repo;
 	@Autowired
@@ -31,6 +30,8 @@ public class PedidoService {
 	private ItemPedidoRepository itemPedidoRepository;
 	@Autowired
 	private ClienteService clienteService;
+	@Autowired
+	private EmailService emailService;
 	
 	public Pedido find(final Integer id) {
 		Optional<Pedido> pedido = repo.findById(id);
@@ -44,7 +45,7 @@ public class PedidoService {
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj); //o pagamento deve conhecer o pedido dele
 		/**
-		 * Consulta o cliente no DB e o associa ao objeto Pedido
+		 * Consulta o cliente no DB e o associa ao objeto Pedido.
 		 */
 		obj.setCliente(clienteService.find(obj.getCliente().getId()));
 		/**
@@ -70,7 +71,7 @@ public class PedidoService {
 			item.setProduto(produtoService.find(item.getProduto().getId()));
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
-		System.out.println(obj);
+		emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	}
 

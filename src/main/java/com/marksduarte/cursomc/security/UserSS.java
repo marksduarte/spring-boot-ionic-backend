@@ -23,8 +23,9 @@ public class UserSS implements UserDetails {
 		
 	}
 	
-	public UserSS(String email, String senha, Set<Perfil> perfis) {
+	public UserSS(Integer id, String email, String senha, Set<Perfil> perfis) {
 		super();
+		this.id = id;
 		this.email = email;
 		this.senha = senha;
 		this.authorities = perfis.stream()
@@ -73,6 +74,10 @@ public class UserSS implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public boolean hasRole(Perfil perfil) {		
+		return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao()));
 	}
 
 }

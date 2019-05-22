@@ -23,6 +23,11 @@ public abstract class AbstractEmailService implements EmailService {
 	@Autowired
 	private TemplateEngine templateEngine;
 	
+	/**
+	 * Para o framework utilizar o JavaMailSender, é necessário que
+	 * as propriedades de spring.mail estejam definidas no arquivo
+	 * properties em uso.
+	 */
 	@Autowired
 	private JavaMailSender javaMailSender;
 

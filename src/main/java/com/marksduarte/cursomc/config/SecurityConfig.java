@@ -1,7 +1,9 @@
 package com.marksduarte.cursomc.config;
 
-import java.util.Arrays;
-
+import com.marksduarte.cursomc.security.JWTAuthenticationFilter;
+import com.marksduarte.cursomc.security.JWTAuthorizationFilter;
+import com.marksduarte.cursomc.security.JWTUtil;
+import com.marksduarte.cursomc.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,15 +15,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.marksduarte.cursomc.security.JWTAuthenticationFilter;
-import com.marksduarte.cursomc.security.JWTAuthorizationFilter;
-import com.marksduarte.cursomc.security.JWTUtil;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -32,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private Environment environment;
 	
 	@Autowired
-	private UserDetailsService userDetailsService; //Ao injetar uma interface, o framework busca alguma implementacao do mesmo no projeto.
+	private UserDetailsServiceImpl userDetailsService; //Ao injetar uma interface, o framework busca alguma implementacao do mesmo no projeto.
 
 	@Autowired
 	private JWTUtil jwtUtil;

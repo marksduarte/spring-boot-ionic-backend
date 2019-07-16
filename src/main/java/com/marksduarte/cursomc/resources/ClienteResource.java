@@ -21,19 +21,25 @@ import java.util.stream.Collectors;
 public class ClienteResource {
 	
 	@Autowired
-	private ClienteService service;
+	private ClienteService clienteService;
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Cliente obj = service.find(id);
+		Cliente obj = clienteService.find(id);
 
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@RequestMapping(value = "/email", method = RequestMethod.GET)
+	public ResponseEntity<Cliente> findByEmail(@RequestParam(value = "value") String email) {
+		Cliente cliente = clienteService.findByEmail(email);
+		return ResponseEntity.ok().body(cliente);
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
-		Cliente obj = service.fromDTO(objDto);
-		obj = service.insert(obj);
+		Cliente obj = clienteService.fromDTO(objDto);
+		obj = clienteService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -41,23 +47,23 @@ public class ClienteResource {
 
 	@RequestMapping(value = "/{id}" , method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id) {
-		Cliente obj = service.fromDTO(objDto);
+		Cliente obj = clienteService.fromDTO(objDto);
 		obj.setId(id); //-> O método find em ClienteService retornou uma exceção quando não tinha essa operação.
-		service.update(obj);
+		clienteService.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		service.delete(id);
+		clienteService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll() {
-		List<Cliente> list = service.findAll();
+		List<Cliente> list = clienteService.findAll();
 		//Atribuir os elementos da lista de Categoria para os elementos da lista DTO
 		List<ClienteDTO> listDto = list.stream() 	//Percorre os elementos da lista, define o nome da variavel de cada objeto como obj
 				.map(obj -> new ClienteDTO(obj)) 	//e com uma arrow function (classe anonima), passa o obj no construtor da DTO.
@@ -72,7 +78,7 @@ public class ClienteResource {
 			@RequestParam(name = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
 			@RequestParam(name = "direction", defaultValue = "ASC") String direction){
-		Page<Cliente> list = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<Cliente> list = clienteService.findPage(page, linesPerPage, orderBy, direction);
 		Page<ClienteDTO> listDto = list.map(obj -> new ClienteDTO(obj));
 		return ResponseEntity.ok().body(listDto);
 	}

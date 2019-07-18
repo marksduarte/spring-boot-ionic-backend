@@ -1,26 +1,16 @@
 package com.marksduarte.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.marksduarte.cursomc.domain.enums.Perfil;
+import com.marksduarte.cursomc.domain.enums.TipoCliente;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.marksduarte.cursomc.domain.enums.Perfil;
-import com.marksduarte.cursomc.domain.enums.TipoCliente;
 
 @Entity
 public class Cliente implements Serializable {
@@ -53,6 +43,8 @@ public class Cliente implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
+
+	private String imageUrl;
 	
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, String senha, TipoCliente tipo) {
 		super();
@@ -147,6 +139,14 @@ public class Cliente implements Serializable {
 
 	public void setPedidos(List<Pedido> pedidos) {
 		this.pedidos = pedidos;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override

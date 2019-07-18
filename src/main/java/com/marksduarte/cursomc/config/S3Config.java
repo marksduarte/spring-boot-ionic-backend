@@ -3,6 +3,11 @@ package com.marksduarte.cursomc.config;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.policy.Policy;
+import com.amazonaws.auth.policy.Principal;
+import com.amazonaws.auth.policy.Resource;
+import com.amazonaws.auth.policy.Statement;
+import com.amazonaws.auth.policy.actions.S3Actions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
@@ -28,16 +33,38 @@ public class S3Config {
 	@Value("${aws.s3-endpoint}")
 	private String s3Endpoint;
 
+	@Value("${s3.bucket}")
+	private String bucketName;
+
 	@Bean
 	public AmazonS3 s3client() {
-		AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-		ClientConfiguration configuration = new ClientConfiguration().withSocketTimeout(longSocketTimeout);
-		configuration = configuration.withSignerOverride("S3SignerType");
-		AmazonS3Client client = new AmazonS3Client(credentials, configuration);
+		AmazonS3Client client;
+		try {
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			ClientConfiguration configuration =
+					new ClientConfiguration().withSocketTimeout(longSocketTimeout)
+						.withSignerOverride("S3SignerType");
 
-		client.setS3ClientOptions(new S3ClientOptions().withPathStyleAccess(true));
-		client.setEndpoint(s3Endpoint);
-
+			client = new AmazonS3Client(credentials, configuration);
+			client.setS3ClientOptions(new S3ClientOptions().withPathStyleAccess(true));
+			client.setEndpoint(s3Endpoint);
+			//client.setBucketPolicy(bucketName, getPublicReadPolicy());
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Política inválida");
+		}
 		return client;
 	}
+
+	// Sets a public read policy on the bucket.
+	// Only if you're using aws service.
+	private String getPublicReadPolicy() {
+		Policy bucketPolicy = new Policy().withStatements(
+				new Statement(Statement.Effect.Allow)
+						.withPrincipals(Principal.AllUsers)
+						.withActions(S3Actions.GetObject)
+						.withResources(new Resource("arn:aws:s3:::" + bucketName + "/*")));
+
+		return bucketPolicy.toJson();
+	}
+
 }

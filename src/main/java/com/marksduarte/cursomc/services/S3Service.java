@@ -49,4 +49,5 @@ public class S3Service {
 			throw new RuntimeException("Erro ao converter URL para URI");
 		}
 	}
+
 }
